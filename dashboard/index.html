@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Health & Longevity Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ── SIDEBAR ── -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <span class="logo-icon">⚕</span>
+    <span class="logo-text">Health &amp; Longevity</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#readiness"    class="nav-link active">Readiness</a></li>
+    <li><a href="#blood"        class="nav-link">Blood Trends</a></li>
+    <li><a href="#uploads"      class="nav-link">Quick Upload</a></li>
+    <li><a href="#sections"     class="nav-link">Sections</a></li>
+    <li><a href="#weekly"       class="nav-link">Weekly Review</a></li>
+  </ul>
+  <div class="sidebar-principle">
+    <p><strong>Core Principle</strong><br>Downside prevention first. Protect recovery, joint/tendon resilience, and running readiness.</p>
+    <p class="cooper">Cooper target: <strong>2600–2700 m</strong></p>
+  </div>
+</nav>
+
+<!-- ── MAIN CONTENT ── -->
+<main class="main">
+
+  <!-- Header -->
+  <header class="top-bar">
+    <div class="top-bar-left">
+      <h1>Health &amp; Longevity Dashboard</h1>
+      <span id="today-date" class="date-badge"></span>
+    </div>
+    <button class="btn-save" id="save-btn" onclick="saveAll()">Save Day</button>
+  </header>
+
+  <!-- ── SECTION 1: READINESS ── -->
+  <section class="card" id="readiness">
+    <h2 class="section-title">Today's Readiness</h2>
+
+    <!-- Day Classification -->
+    <div class="readiness-row">
+      <label class="field-label">Day Classification</label>
+      <div class="traffic-lights">
+        <button class="light green"  id="light-green"  onclick="setLight('green')">Green</button>
+        <button class="light yellow" id="light-yellow" onclick="setLight('yellow')">Yellow</button>
+        <button class="light red"    id="light-red"    onclick="setLight('red')">Red</button>
+      </div>
+    </div>
+
+    <!-- Metrics grid -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <label class="metric-label">Sleep Score</label>
+        <input class="metric-input" id="sleep-score" type="number" min="0" max="100" placeholder="0–100" />
+        <span class="metric-unit">/ 100</span>
+      </div>
+      <div class="metric-card">
+        <label class="metric-label">HRV</label>
+        <input class="metric-input" id="hrv" type="number" min="0" placeholder="ms" />
+        <span class="metric-unit">ms</span>
+      </div>
+      <div class="metric-card">
+        <label class="metric-label">Resting HR</label>
+        <input class="metric-input" id="rhr" type="number" min="0" placeholder="bpm" />
+        <span class="metric-unit">bpm</span>
+      </div>
+      <div class="metric-card">
+        <label class="metric-label">Body Weight</label>
+        <input class="metric-input" id="body-weight" type="number" step="0.1" placeholder="kg" />
+        <span class="metric-unit">kg</span>
+      </div>
+    </div>
+
+    <!-- Subjective sliders -->
+    <div class="sliders-grid">
+      <div class="slider-item">
+        <div class="slider-header">
+          <label class="field-label">Subjective Fatigue</label>
+          <span class="slider-val" id="fatigue-val">5</span>
+        </div>
+        <input class="slider" id="fatigue" type="range" min="1" max="10" value="5"
+               oninput="document.getElementById('fatigue-val').textContent=this.value" />
+        <div class="slider-labels"><span>Low</span><span>High</span></div>
+      </div>
+      <div class="slider-item">
+        <div class="slider-header">
+          <label class="field-label">Muscle Soreness</label>
+          <span class="slider-val" id="soreness-val">5</span>
+        </div>
+        <input class="slider" id="soreness" type="range" min="1" max="10" value="5"
+               oninput="document.getElementById('soreness-val').textContent=this.value" />
+        <div class="slider-labels"><span>None</span><span>Severe</span></div>
+      </div>
+    </div>
+
+    <!-- Calls -->
+    <div class="calls-row">
+      <div class="call-block">
+        <label class="field-label">Training Call</label>
+        <select class="call-select" id="training-call">
+          <option value="">-- select --</option>
+          <option value="proceed">Proceed</option>
+          <option value="modify">Modify</option>
+          <option value="pullback">Pull back</option>
+          <option value="rest">Rest</option>
+        </select>
+      </div>
+      <div class="call-block">
+        <label class="field-label">Nutrition Call</label>
+        <select class="call-select" id="nutrition-call">
+          <option value="">-- select --</option>
+          <option value="hold">Hold</option>
+          <option value="increase">Increase</option>
+          <option value="recovery-feed">Recovery-feed</option>
+          <option value="avoid-deficit">Avoid deficit</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Notes -->
+    <div class="notes-block">
+      <label class="field-label">Daily Notes / Log</label>
+      <textarea class="notes-area" id="daily-notes" rows="3"
+                placeholder="Subjective notes, mood, highlights…"></textarea>
+    </div>
+  </section>
+
+  <!-- ── SECTION 2: BLOOD TRENDS ── -->
+  <section class="card" id="blood">
+    <h2 class="section-title">Key Long-Term Blood Trends</h2>
+    <div class="blood-grid">
+
+      <div class="blood-item">
+        <div class="blood-header">
+          <span class="blood-name">Glucose / A1C</span>
+          <span class="blood-badge warn">Monitor</span>
+        </div>
+        <p class="blood-trend">Slow upward drift <span class="blood-arrow">↑</span> 80s → 95–102 mg/dL</p>
+        <p class="blood-note">Monitor carbs on high-load days. Avoid large deficits.</p>
+        <div class="blood-inputs">
+          <input class="blood-input" id="glucose-val" type="number" placeholder="Last glucose" />
+          <input class="blood-input" id="a1c-val" type="number" step="0.1" placeholder="Last A1C %" />
+        </div>
+      </div>
+
+      <div class="blood-item">
+        <div class="blood-header">
+          <span class="blood-name">Cholesterol</span>
+          <span class="blood-badge warn">Elevated</span>
+        </div>
+        <p class="blood-trend">LDL historically elevated; HDL stable</p>
+        <p class="blood-note">Prioritize unsaturated fats, fiber, and aerobic base.</p>
+        <div class="blood-inputs">
+          <input class="blood-input" id="ldl-val" type="number" placeholder="LDL mg/dL" />
+          <input class="blood-input" id="hdl-val" type="number" placeholder="HDL mg/dL" />
+        </div>
+      </div>
+
+      <div class="blood-item">
+        <div class="blood-header">
+          <span class="blood-name">Creatinine</span>
+          <span class="blood-badge ok">Stable</span>
+        </div>
+        <p class="blood-trend">Very stable <span class="blood-arrow stable">→</span> 1.0–1.12 mg/dL</p>
+        <p class="blood-note">Kidney function looks good. Maintain hydration.</p>
+        <div class="blood-inputs">
+          <input class="blood-input" id="creatinine-val" type="number" step="0.01" placeholder="Creatinine" />
+        </div>
+      </div>
+
+      <div class="blood-item full-width">
+        <div class="blood-header">
+          <span class="blood-name">Overall Pattern</span>
+          <span class="blood-badge warn">Action</span>
+        </div>
+        <p class="blood-note">Metabolic markers shifting slowly — prioritize recovery. Schedule next labs if &gt;3 months since last draw.</p>
+        <div class="blood-inputs">
+          <input class="blood-input wide" id="last-labs-date" type="date" />
+          <label class="blood-input-label">Date of last labs</label>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── SECTION 3: QUICK UPLOAD ── -->
+  <section class="card" id="uploads">
+    <h2 class="section-title">Quick Upload Zones</h2>
+    <div class="upload-grid">
+
+      <div class="drop-zone" id="drop-garmin"
+           ondragover="event.preventDefault();this.classList.add('drag-over')"
+           ondragleave="this.classList.remove('drag-over')"
+           ondrop="handleDrop(event,'drop-garmin','garmin-log')">
+        <span class="drop-icon">⌚</span>
+        <p class="drop-title">Garmin Screenshot</p>
+        <p class="drop-sub">Sleep / HRV / Workout</p>
+        <label class="drop-btn">
+          Browse
+          <input type="file" accept="image/*" onchange="handleFile(this,'garmin-log')" hidden />
+        </label>
+        <div class="drop-preview" id="garmin-log"></div>
+      </div>
+
+      <div class="drop-zone" id="drop-food"
+           ondragover="event.preventDefault();this.classList.add('drag-over')"
+           ondragleave="this.classList.remove('drag-over')"
+           ondrop="handleDrop(event,'drop-food','food-log')">
+        <span class="drop-icon">🥗</span>
+        <p class="drop-title">Food Photo</p>
+        <p class="drop-sub">Drop for macro estimate</p>
+        <label class="drop-btn">
+          Browse
+          <input type="file" accept="image/*" onchange="handleFile(this,'food-log')" hidden />
+        </label>
+        <div class="drop-preview" id="food-log"></div>
+      </div>
+
+      <div class="drop-zone" id="drop-labs"
+           ondragover="event.preventDefault();this.classList.add('drag-over')"
+           ondragleave="this.classList.remove('drag-over')"
+           ondrop="handleDrop(event,'drop-labs','labs-log')">
+        <span class="drop-icon">🧪</span>
+        <p class="drop-title">Lab / EKG PDF</p>
+        <p class="drop-sub">New results → Labs &amp; Biomarkers</p>
+        <label class="drop-btn">
+          Browse
+          <input type="file" accept=".pdf,image/*" onchange="handleFile(this,'labs-log')" hidden />
+        </label>
+        <div class="drop-preview" id="labs-log"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── SECTION 4: CORE SECTIONS ── -->
+  <section class="card" id="sections">
+    <h2 class="section-title">Core Sections</h2>
+    <div class="sections-grid">
+      <a class="section-tile" href="daily-logs.html">
+        <span class="tile-icon">📅</span>
+        <span class="tile-title">Daily Logs</span>
+        <span class="tile-sub">Day-by-day entries</span>
+      </a>
+      <a class="section-tile" href="workouts.html">
+        <span class="tile-icon">🏃</span>
+        <span class="tile-title">Workouts</span>
+        <span class="tile-sub">Training plans &amp; history</span>
+      </a>
+      <a class="section-tile" href="nutrition.html">
+        <span class="tile-icon">🥦</span>
+        <span class="tile-title">Nutrition</span>
+        <span class="tile-sub">Macros &amp; food journal</span>
+      </a>
+      <a class="section-tile" href="labs.html">
+        <span class="tile-icon">🧬</span>
+        <span class="tile-title">Labs &amp; Biomarkers</span>
+        <span class="tile-sub">Blood history &amp; trends</span>
+      </a>
+      <a class="section-tile" href="recovery.html">
+        <span class="tile-icon">💤</span>
+        <span class="tile-title">Recovery &amp; Vitals</span>
+        <span class="tile-sub">Sleep, HRV, body metrics</span>
+      </a>
+      <a class="section-tile" href="reflections.html">
+        <span class="tile-icon">🧠</span>
+        <span class="tile-title">Reflections &amp; Longevity</span>
+        <span class="tile-sub">Goals, mindset, long game</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ── SECTION 5: WEEKLY REVIEW ── -->
+  <section class="card" id="weekly">
+    <h2 class="section-title">Weekly Compliance — Sunday Review</h2>
+    <div class="weekly-grid">
+
+      <div class="compliance-col">
+        <h3 class="compliance-heading">Training</h3>
+        <div class="check-item"><input type="checkbox" id="w-training-1" /><label for="w-training-1">Hit aerobic sessions</label></div>
+        <div class="check-item"><input type="checkbox" id="w-training-2" /><label for="w-training-2">Strength work completed</label></div>
+        <div class="check-item"><input type="checkbox" id="w-training-3" /><label for="w-training-3">No joint/tendon red flags</label></div>
+        <div class="check-item"><input type="checkbox" id="w-training-4" /><label for="w-training-4">Cooper readiness on track</label></div>
+      </div>
+
+      <div class="compliance-col">
+        <h3 class="compliance-heading">Recovery</h3>
+        <div class="check-item"><input type="checkbox" id="w-rec-1" /><label for="w-rec-1">7+ hrs sleep most nights</label></div>
+        <div class="check-item"><input type="checkbox" id="w-rec-2" /><label for="w-rec-2">HRV trend stable or rising</label></div>
+        <div class="check-item"><input type="checkbox" id="w-rec-3" /><label for="w-rec-3">Active recovery done</label></div>
+        <div class="check-item"><input type="checkbox" id="w-rec-4" /><label for="w-rec-4">Stress managed</label></div>
+      </div>
+
+      <div class="compliance-col">
+        <h3 class="compliance-heading">Nutrition</h3>
+        <div class="check-item"><input type="checkbox" id="w-nut-1" /><label for="w-nut-1">Protein targets met</label></div>
+        <div class="check-item"><input type="checkbox" id="w-nut-2" /><label for="w-nut-2">No large caloric deficit</label></div>
+        <div class="check-item"><input type="checkbox" id="w-nut-3" /><label for="w-nut-3">Carb timing on load days</label></div>
+        <div class="check-item"><input type="checkbox" id="w-nut-4" /><label for="w-nut-4">Hydration consistent</label></div>
+      </div>
+
+      <div class="compliance-col">
+        <h3 class="compliance-heading">Risk Management</h3>
+        <div class="check-item"><input type="checkbox" id="w-risk-1" /><label for="w-risk-1">No overtraining signals</label></div>
+        <div class="check-item"><input type="checkbox" id="w-risk-2" /><label for="w-risk-2">Sleep debt addressed</label></div>
+        <div class="check-item"><input type="checkbox" id="w-risk-3" /><label for="w-risk-3">Labs reviewed if due</label></div>
+        <div class="check-item"><input type="checkbox" id="w-risk-4" /><label for="w-risk-4">Downside protected</label></div>
+      </div>
+
+    </div>
+
+    <div class="next-week-block">
+      <label class="field-label">One change for next week</label>
+      <textarea class="notes-area" id="next-week" rows="2"
+                placeholder="Write one specific, actionable change…"></textarea>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span>Health &amp; Longevity Dashboard</span>
+    <span id="saved-msg" class="saved-msg"></span>
+  </footer>
+
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
